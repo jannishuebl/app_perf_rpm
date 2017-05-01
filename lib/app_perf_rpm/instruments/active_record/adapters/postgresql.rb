@@ -17,10 +17,10 @@ module AppPerfRpm
               name == 'ActiveRecord::SchemaMigration Load'
           end
 
-          def exec_query_with_trace(sql, name = nil, binds = [])
+          def exec_query_with_trace(sql, name = nil, *args)
             if ::AppPerfRpm::Tracer.tracing?
               if ignore_trace?(name)
-                exec_query_without_trace(sql, name, binds)
+                exec_query_without_trace(sql, name, *args)
               else
                 sanitized_sql = sanitize_sql(sql)
 
@@ -34,18 +34,18 @@ module AppPerfRpm
                 opts["source"] = ::AppPerfRpm::Backtrace.source_extract
 
                 AppPerfRpm::Tracer.trace('activerecord', opts) do
-                  exec_query_without_trace(sql, name, binds)
+                  exec_query_without_trace(sql, name, *args)
                 end
               end
             else
-              exec_query_without_trace(sql, name, binds)
+              exec_query_without_trace(sql, name, *args)
             end
           end
 
-          def exec_delete_with_trace(sql, name = nil, binds = [])
+          def exec_delete_with_trace(sql, name = nil, *args)
             if ::AppPerfRpm::Tracer.tracing?
               if ignore_trace?(name)
-                exec_delete_without_trace(sql, name, binds)
+                exec_delete_without_trace(sql, name, *args)
               else
                 sanitized_sql = sanitize_sql(sql)
 
@@ -59,18 +59,18 @@ module AppPerfRpm
                 opts["source"] = ::AppPerfRpm::Backtrace.source_extract
 
                 AppPerfRpm::Tracer.trace('activerecord', opts) do
-                  exec_delete_without_trace(sql, name, binds)
+                  exec_delete_without_trace(sql, name, *args)
                 end
               end
             else
-              exec_delete_without_trace(sql, name, binds)
+              exec_delete_without_trace(sql, name, *args)
             end
           end
 
-          def exec_insert_with_trace(sql, name = nil, binds = [], *args)
+          def exec_insert_with_trace(sql, name = nil, *args)
             if ::AppPerfRpm::Tracer.tracing?
               if ignore_trace?(name)
-                exec_insert_without_trace(sql, name, binds, *args)
+                exec_insert_without_trace(sql, name, *args)
               else
                 sanitized_sql = sanitize_sql(sql)
 
@@ -84,11 +84,11 @@ module AppPerfRpm
                 opts["source"] = ::AppPerfRpm::Backtrace.source_extract
 
                 AppPerfRpm::Tracer.trace('activerecord', opts) do
-                  exec_insert_without_trace(sql, name, binds, *args)
+                  exec_insert_without_trace(sql, name, *args)
                 end
               end
             else
-              exec_insert_without_trace(sql, name, binds, *args)
+              exec_insert_without_trace(sql, name, *args)
             end
           end
 
